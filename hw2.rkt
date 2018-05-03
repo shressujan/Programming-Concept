@@ -1,0 +1,81 @@
+#lang racket
+
+;Problem 1
+;Problem a
+
+(define (reverse-digits x n)
+  (cond [(zero? n) x]
+        [else  (reverse-digits (+  (* x  10) (modulo n 10) )  (truncate (/ n 10)))]));
+(displayln "reversing digits");
+(reverse-digits 0 397164);
+
+;problem b
+(displayln "");
+(displayln "Same digits:")
+(define (same-digits a b)
+  (define (lists a b)
+  (define (cons-list a)
+  (cond [(< a 10 ) (list a) ]
+        [else (cons (modulo a 10) (cons-list (truncate(/ a 10))))]))
+    (cond [(equal? (sort (cons-list a) <) (sort (cons-list b) <)) "They are equal"]
+          [#t "They are not equal"]))
+  (lists a b));
+
+(same-digits 23423 24313);
+
+
+;(cons 1 (list 2));
+
+; The problem with Jon Von-Neuman is that you would come across a squared number with all zeroes in the middle which you wouldnt be able to square anymore.
+;problem 2
+(displayln "");
+(displayln "Jon Von-Neuman");
+(define (Von-Neuman num digits)
+  (define(cons-list a)
+    (cond [(< a 10 ) (list a) ]
+          [else (append  (cons-list (truncate(/ a 10))) (list (modulo a 10)))]))
+  (drop-right (list-tail (cons-list (* num num)) (floor (/ digits 4))) (ceiling (/ digits 4)))
+  )
+
+(Von-Neuman 411 6)
+(Von-Neuman 1400 7)
+(Von-Neuman 11400 9)
+(Von-Neuman 100 6)
+(Von-Neuman 111400 11)
+(Von-Neuman 5772156649 20)
+
+;(list-tail (list 1 2 3 4 5 6) 2);
+
+
+
+;(take-right '(1 2 3) 2)
+
+
+;problem 3
+(displayln "");
+(displayln "Problem 3")
+
+
+(define (prime? n)
+    (define (smallest-divisor n)
+      (define (find-divisor n test-divisor)
+        (define (divides? a b)
+          (= (remainder b a) 0))
+        (cond ((> (* test-divisor test-divisor) n) n)
+              (( divides? test-divisor n) test-divisor)
+              (else (find-divisor n (+ test-divisor 1))))) 
+      (find-divisor n 2))
+    (= n (smallest-divisor n)))
+
+;(equal? (prime-test (+ start 1)) (prime-test (- (expt 2 (+ start 1)) 1)))
+
+(define (next-Mersenne-Prime  start  prime-test)
+  (define (mersenne? start)
+    (cond [(prime-test (- (expt 2 start) 1))  start]
+        [#t (next-Mersenne-Prime (+ start 1) prime-test)]))
+  (cond[( prime-test (+ start 1) ) (mersenne? (+ start 1))]
+       [#t (next-Mersenne-Prime (+ start 1) prime-test) ]))
+
+
+(next-Mersenne-Prime  31 prime?)
+;(Mersenne-Prime 6);
